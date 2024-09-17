@@ -5,7 +5,7 @@
 CXX ?= g++
 
 # Compiler flags
-CXXFLAGS ?= --std=c++17 -Wall -Werror -pedantic -g -Wno-sign-compare -Wno-comment
+CXXFLAGS ?= --std=c++17 -Wall -Werror -pedantic -g -Wno-sign-compare -Wno-comment -fsanitize=address -fsanitize=undefined
 
 # Set the following to true to build with JPEG support
 USE_LIBJPEG ?=
