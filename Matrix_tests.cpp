@@ -18,8 +18,8 @@ TEST(test_fill_basic) {
   Matrix_init(&mat, 3, 5);
   Matrix_fill(&mat, value);
 
-  for(int r = 0; r < height; ++r){
-    for(int c = 0; c < width; ++c){
+  for(int r = 0; r < height; r++){
+    for(int c = 0; c < width; c++){
       ASSERT_EQUAL(*Matrix_at(&mat, r, c), value);
     }
   }
@@ -37,8 +37,8 @@ TEST(test_matrix_init) {
     ASSERT_EQUAL(Matrix_height(&mat), 6);
 
     // Check that all elements are initialized to 0
-    for (int r = 0; r < 6; ++r) {
-        for (int c = 0; c < 4; ++c) {
+    for (int r = 0; r < 6; r++) {
+        for (int c = 0; c < 4; c++) {
             ASSERT_EQUAL(*Matrix_at(&mat, r, c), 0);
         }
     }
@@ -50,8 +50,8 @@ TEST(test_matrix_fill) {
     Matrix_init(&mat, 3, 3);
     Matrix_fill(&mat, 5);
 
-    for (int r = 0; r < 3; ++r) {
-        for (int c = 0; c < 3; ++c) {
+    for (int r = 0; r < 3; r++) {
+        for (int c = 0; c < 3; c++) {
             ASSERT_EQUAL(*Matrix_at(&mat, r, c), 5);
         }
     }
@@ -64,8 +64,8 @@ TEST(test_matrix_fill_border) {
     Matrix_fill_border(&mat, 9);
 
     // Check borders
-    for (int r = 0; r < 4; ++r) {
-        for (int c = 0; c < 4; ++c) {
+    for (int r = 0; r < 4; r++) {
+        for (int c = 0; c < 4; c++) {
             if (r == 0 || r == 3 || c == 0 || c == 3) {
                 ASSERT_EQUAL(*Matrix_at(&mat, r, c), 9);
             } else {
@@ -153,8 +153,8 @@ TEST(test_matrix_fill_negative_value) {
     Matrix_init(&mat, 3, 3);
     Matrix_fill(&mat, -10);
 
-    for (int r = 0; r < 3; ++r) {
-        for (int c = 0; c < 3; ++c) {
+    for (int r = 0; r < 3; r++) {
+        for (int c = 0; c < 3; c++) {
             ASSERT_EQUAL(*Matrix_at(&mat, r, c), -10);
         }
     }
