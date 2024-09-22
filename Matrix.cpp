@@ -87,7 +87,7 @@ void Matrix_fill(Matrix* mat, int value) {
 void Matrix_fill_border(Matrix* mat, int value) {
   for (int i = 0; i < mat->width; i++) {
     mat->data[i] = value;
-    mat->data[mat->data.size() - i] = value;
+    mat->data[mat->data.size() - i - 1] = value;
   }
 
   for (int i = 1 ; i < mat->height; i++) {
@@ -120,15 +120,17 @@ int Matrix_max(const Matrix* mat) {
 //           the leftmost one.
 int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
                                       int column_start, int column_end) {
-  int min = mat->data[row * mat->width + column_start];
-  int minIndex = row * mat->width + column_start;
-  for (int i = column_start + 1; i < column_end; i++) {
-    if (min > mat->data[row * mat->width + column_start + i]) {
-      min = mat->data[row * mat->width + column_start + i];
-      minIndex = row * mat->width + column_start + i;
+  int minIndex = column_start + row * Matrix_width(mat) - 1;
+  if (row == 0) {minIndex = column_start;}
+  // cout << "\nInital MINIndex: " << minIndex << endl;
+  for (int i = 1; i < column_end - column_start; i++) {
+    if (mat->data[minIndex] > mat->data[column_start + row * Matrix_width(mat) + i]) {
+      minIndex = column_start + row * Matrix_width(mat) + i;
+      // cout << "\nNew MINIndex: " << minIndex << endl;
     }
   }
-  return minIndex;
+  // cout << "\nFinal MINIndex: " << minIndex << endl;
+  return (minIndex + 1) % Matrix_width(mat) - 1;
 }
 
 // REQUIRES: mat points to a valid Matrix
