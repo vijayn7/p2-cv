@@ -40,9 +40,9 @@ void Image_init(Image *img, std::istream &is)
   int green;
   int blue;
 
-  for (int row = 0; row < img->width; row++)
+  for (int row = 0; row < img->height; row++)
   {
-    for (int col = 0; col < img->height; col++)
+    for (int col = 0; col < img->width; col++)
     {
       is >> red;
       is >> green;
@@ -73,9 +73,9 @@ void Image_print(const Image *img, std::ostream &os)
 {
   os << "P3\n"
      << img->width << " " << img->height << "\n255\n";
-  for (int row = 0; row < img->width; row++)
+  for (int row = 0; row < img->height; row++)
   {
-    for (int col = 0; col < img->height; col++)
+    for (int col = 0; col < img->width; col++)
     {
       Pixel pixel = Image_get_pixel(img, row, col);
       os << pixel.r << " " << pixel.g << " " << pixel.b << " ";
@@ -132,9 +132,9 @@ void Image_set_pixel(Image *img, int row, int column, Pixel color)
 // EFFECTS:  Sets each pixel in the image to the given color.
 void Image_fill(Image *img, Pixel color)
 {
-  for (int row = 0; row < img->width; row++)
+  for (int row = 0; row < img->height; row++)
   {
-    for (int col = 0; col < img->height; col++)
+    for (int col = 0; col < img->width; col++)
     {
       Image_set_pixel(img, row, col, color);
     }

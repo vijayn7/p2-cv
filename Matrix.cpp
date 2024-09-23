@@ -64,8 +64,6 @@ int* Matrix_at(Matrix* mat, int row, int column) {
 // EFFECTS:  Returns a pointer-to-const to the element in
 //           the Matrix at the given row and column.
 const int* Matrix_at(const Matrix* mat, int row, int column) {
-  assert(0 <= row && row < mat->height);
-  assert(0 <= column && column < mat->width);
   const int* value = &mat->data.at(row * mat->width + column);
   return value;
 }

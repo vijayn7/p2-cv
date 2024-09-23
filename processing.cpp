@@ -159,17 +159,23 @@ vector<int> find_minimal_vertical_seam(const Matrix *cost)
 {
   vector<int> seam = vector<int>(Matrix_height(cost));
 
-  seam[0] = Matrix_column_of_min_value_in_row(cost, Matrix_height(cost) - 1, 0, Matrix_width(cost) - 1);
+  seam[seam.size() - 1] = Matrix_column_of_min_value_in_row(cost, Matrix_height(cost) - 1, 0, Matrix_width(cost) - 1);
 
-  for (int i = Matrix_height(cost) - 1; i > 0; i --) {
-    int col = seam[Matrix_height(cost) - i - 1];
-    if (col == 0) {
-      seam[Matrix_height(cost) - i] = Matrix_column_of_min_value_in_row(cost, i - 1, col, col + 2);
-    } else if (col == Matrix_width(cost) - 1) {
-      seam[Matrix_height(cost) - i] = Matrix_column_of_min_value_in_row(cost, i - 1, col - 1, col + 1);
-    } else {
+  for (int i = seam.size() - 2; i >= 0; i--)
+  {
+    int col = seam[i + 1];
+    if (col == 0)
+    {
+      seam[i] = Matrix_column_of_min_value_in_row(cost, i, col, col + 2);
+    }
+    else if (col == Matrix_width(cost) - 1)
+    {
+      seam[i] = Matrix_column_of_min_value_in_row(cost, i, col - 1, col + 1);
+    }
+    else
+    {
       // cout << "\nCurrent cell: " << i * cost->width + col << endl;
-      seam[Matrix_height(cost) - i] = Matrix_column_of_min_value_in_row(cost, i - 1, col - 1, col + 2);
+      seam[i] = Matrix_column_of_min_value_in_row(cost, i, col - 1, col + 2);
     }
   }
 
@@ -190,7 +196,21 @@ vector<int> find_minimal_vertical_seam(const Matrix *cost)
 //           original image.
 void remove_vertical_seam(Image *img, const vector<int> &seam)
 {
-  assert(false); // TODO Replace with your implementation!
+  Image smaller;
+  Image_init(&smaller, Image_width(img) - 1, Image_height(img));
+
+  for (int row = 0; row < Image_height(img); row++)
+  {
+    for (int col = 0; col < Image_width(img); col++)
+    {
+      if (col == seam[row]) {
+        continue;
+      }
+      Image_set_pixel(&smaller, row, col - (col > seam[row]), Image_get_pixel(img, row, col));
+    }
+  }
+  
+  *img = smaller;
 }
 
 // REQUIRES: img points to a valid Image
