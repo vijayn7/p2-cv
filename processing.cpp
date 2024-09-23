@@ -223,7 +223,15 @@ void remove_vertical_seam(Image *img, const vector<int> &seam)
 //           the underlying array.
 void seam_carve_width(Image *img, int newWidth)
 {
-  assert(false); // TODO Replace with your implementation!
+  while (Image_width(img) > newWidth)
+  {
+    Matrix energy;
+    compute_energy_matrix(img, &energy);
+    Matrix cost;
+    compute_vertical_cost_matrix(&energy, &cost);
+    vector<int> seam = find_minimal_vertical_seam(&cost);
+    remove_vertical_seam(img, seam);
+  }
 }
 
 // REQUIRES: img points to a valid Image
