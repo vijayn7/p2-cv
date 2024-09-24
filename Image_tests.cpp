@@ -136,4 +136,39 @@ TEST(test_image_equal) {
   ASSERT_TRUE(Image_equal(&img1, &img2));
 }
 
+// Test case for filling an Image and ensuring all pixels are updated
+TEST(test_image_fill_check) {
+  Image img;
+  Image_init(&img, 4, 4);
+
+  Pixel blue = {0, 0, 255};
+  Image_fill(&img, blue);
+
+  // Ensure all pixels are set to blue
+  for (int row = 0; row < 4; row++) {
+    for (int col = 0; col < 4; col++) {
+      ASSERT_TRUE(Pixel_equal(Image_get_pixel(&img, row, col), blue));
+    }
+  }
+}
+
+// Test case for checking if Image correctly detects unequal Images with different sizes
+TEST(test_image_different_size_equal) {
+  Image img1, img2;
+  Image_init(&img1, 3, 3);
+  Image_init(&img2, 2, 2);
+
+  ASSERT_FALSE(Image_equal(&img1, &img2));
+}
+
+TEST(test_image_memory_management) {
+  Image img;
+  Image_init(&img, 10, 10);
+
+  // Perform operations, set and get pixels
+  Pixel color = {100, 150, 200};
+  Image_set_pixel(&img, 5, 5, color);
+  ASSERT_TRUE(Pixel_equal(Image_get_pixel(&img, 5, 5), color));
+}
+
 TEST_MAIN() // Do NOT put a semicolon here

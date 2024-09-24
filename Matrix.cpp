@@ -118,7 +118,9 @@ int Matrix_max(const Matrix* mat) {
 //           the leftmost one.
 int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
                                       int column_start, int column_end) {
+  
   int minIndex = column_start + row * Matrix_width(mat) - 1;
+  if (row ==0 && column_start == 0) {minIndex = 0;}
   if (row == 0) {minIndex = column_start;}
   // cout << "\nInital MINIndex: " << minIndex << endl;
   for (int i = 1; i < column_end - column_start; i++) {
@@ -128,6 +130,9 @@ int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
     }
   }
   // cout << "\nFinal MINIndex: " << minIndex << endl;
+  if ((minIndex + 1) % Matrix_width(mat) - 1 < 0) {
+    return 0;
+  }
   return (minIndex + 1) % Matrix_width(mat) - 1;
 }
 

@@ -90,7 +90,7 @@ static int squared_difference(Pixel p1, Pixel p2)
 //           See the project spec for details on computing the energy matrix.
 void compute_energy_matrix(const Image *img, Matrix *energy)
 {
-  Matrix_init(energy, img->width, img->height);
+  Matrix_init(energy, Image_width(img), Image_height(img));
   for (int row = 1; row < img->height - 1; row++)
   { // Corrected loop bounds
     for (int col = 1; col < img->width - 1; col++)
@@ -124,9 +124,9 @@ void compute_vertical_cost_matrix(const Matrix *energy, Matrix *cost)
     *Matrix_at(cost, 0, col) = *Matrix_at(energy, 0, col);
   }
 
-  for (int row = 1; row < Matrix_width(cost); row++)
+  for (int row = 1; row < Matrix_height(cost); row++)
   {
-    for (int col = 0; col < Matrix_height(cost); col++)
+    for (int col = 0; col < Matrix_width(cost); col++)
     {
       int minCost;
       if (col < 1)
@@ -158,6 +158,8 @@ void compute_vertical_cost_matrix(const Matrix *energy, Matrix *cost)
 vector<int> find_minimal_vertical_seam(const Matrix *cost)
 {
   vector<int> seam = vector<int>(Matrix_height(cost));
+
+  // Matrix_print(cost, cout);
 
   seam[seam.size() - 1] = Matrix_column_of_min_value_in_row(cost, Matrix_height(cost) - 1, 0, Matrix_width(cost) - 1);
 
@@ -243,7 +245,9 @@ void seam_carve_width(Image *img, int newWidth)
 //           90 degrees right.
 void seam_carve_height(Image *img, int newHeight)
 {
-  assert(false); // TODO Replace with your implementation!
+  rotate_left(img);
+  seam_carve_width(img, newHeight);
+  rotate_right(img);
 }
 
 // REQUIRES: img points to a valid Image
@@ -256,5 +260,6 @@ void seam_carve_height(Image *img, int newHeight)
 //           and then applying seam_carve_height(img, newHeight).
 void seam_carve(Image *img, int newWidth, int newHeight)
 {
-  assert(false); // TODO Replace with your implementation!
+  seam_carve_width(img, newWidth);
+  seam_carve_height(img, newHeight);
 }
