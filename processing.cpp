@@ -91,15 +91,16 @@ static int squared_difference(Pixel p1, Pixel p2)
 void compute_energy_matrix(const Image *img, Matrix *energy)
 {
   Matrix_init(energy, Image_width(img), Image_height(img));
-  for (int row = 1; row < img->height - 1; row++)
+  for (int row = 1; row < Image_height(img) - 1; row++)
   { // Corrected loop bounds
-    for (int col = 1; col < img->width - 1; col++)
+    for (int col = 1; col < Image_width(img) - 1; col++)
     { // Corrected loop bounds
       Pixel north = Image_get_pixel(img, row - 1, col);
       Pixel east = Image_get_pixel(img, row, col + 1);
       Pixel south = Image_get_pixel(img, row + 1, col);
       Pixel west = Image_get_pixel(img, row, col - 1);
-      int computedEnergy = squared_difference(north, south) + squared_difference(west, east);
+      int computedEnergy = squared_difference(north, south)
+      + squared_difference(west, east);
       *Matrix_at(energy, row, col) = computedEnergy;
     }
   }
@@ -131,15 +132,22 @@ void compute_vertical_cost_matrix(const Matrix *energy, Matrix *cost)
       int minCost;
       if (col < 1)
       {
-        minCost = *Matrix_at(energy, row, col) + min(*Matrix_at(cost, row - 1, col), *Matrix_at(cost, row - 1, col + 1));
+        minCost = *Matrix_at(energy, row, col) +
+        min(*Matrix_at(cost, row - 1, col),
+        *Matrix_at(cost, row - 1, col + 1));
       }
       else if (col >= Matrix_width(cost) - 1)
       {
-        minCost = *Matrix_at(energy, row, col) + min(*Matrix_at(cost, row - 1, col), *Matrix_at(cost, row - 1, col - 1));
+        minCost = *Matrix_at(energy, row, col) +
+        min(*Matrix_at(cost, row - 1, col),
+        *Matrix_at(cost, row - 1, col - 1));
       }
       else
       {
-        minCost = *Matrix_at(energy, row, col) + min(*Matrix_at(cost, row - 1, col), min(*Matrix_at(cost, row - 1, col - 1), *Matrix_at(cost, row - 1, col + 1)));
+        minCost = *Matrix_at(energy, row, col) +
+        min(*Matrix_at(cost, row - 1, col),
+        min(*Matrix_at(cost, row - 1, col - 1),
+        *Matrix_at(cost, row - 1, col + 1)));
       }
       *Matrix_at(cost, row, col) = minCost;
     }
@@ -161,7 +169,9 @@ vector<int> find_minimal_vertical_seam(const Matrix *cost)
 
   // Matrix_print(cost, cout);
 
-  seam[seam.size() - 1] = Matrix_column_of_min_value_in_row(cost, Matrix_height(cost) - 1, 0, Matrix_width(cost) - 1);
+  seam[seam.size() - 1] = 
+  Matrix_column_of_min_value_in_row(
+    cost, Matrix_height(cost) - 1, 0, Matrix_width(cost) - 1);
 
   for (int i = seam.size() - 2; i >= 0; i--)
   {
@@ -176,7 +186,6 @@ vector<int> find_minimal_vertical_seam(const Matrix *cost)
     }
     else
     {
-      // cout << "\nCurrent cell: " << i * cost->width + col << endl;
       seam[i] = Matrix_column_of_min_value_in_row(cost, i, col - 1, col + 2);
     }
   }
@@ -205,13 +214,15 @@ void remove_vertical_seam(Image *img, const vector<int> &seam)
   {
     for (int col = 0; col < Image_width(img); col++)
     {
-      if (col == seam[row]) {
+      if (col == seam[row])
+      {
         continue;
       }
-      Image_set_pixel(&smaller, row, col - (col > seam[row]), Image_get_pixel(img, row, col));
+      Image_set_pixel(&smaller, row, col - (col > seam[row]),
+      Image_get_pixel(img, row, col));
     }
   }
-  
+
   *img = smaller;
 }
 

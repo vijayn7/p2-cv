@@ -98,7 +98,8 @@ void Matrix_fill_border(Matrix* mat, int value) {
 // EFFECTS:  Returns the value of the maximum element in the Matrix
 int Matrix_max(const Matrix* mat) {
   int max = mat->data[0];
-  for (int i = 1; i < mat->data.size(); i++) { // start at index 1 because 0 is used for the inital max value
+  for (int i = 1; i < mat->data.size(); i++) { 
+    // start at index 1 because 0 is used for the inital max value
     if (mat->data[i] > max) {
       max = mat->data[i];
     }

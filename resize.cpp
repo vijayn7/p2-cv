@@ -24,8 +24,6 @@ int main(int argc, char *argv[]) {
     // cout << "width: " << width << endl;
     // cout << "height: " << height << endl;
 
-    // cout << "Resizing " << input << " to " << width << "x" << height << " With filename: " << output << endl;
-
     ifstream fin(input);
 
     if (!fin) {
@@ -41,8 +39,12 @@ int main(int argc, char *argv[]) {
     Image original;
     Image_init(&original, fin);
 
-    if (width > Image_width(&original) || !(width > 0) || height > Image_height(&original) || !(height > 0)) {
-        cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]\n"
+    if (width > Image_width(&original) ||
+    !(width > 0) ||
+    height > Image_height(&original) ||
+    !(height > 0)) {
+
+    cout << "Usage: resize.exe IN_FILENAME OUT_FILENAME WIDTH [HEIGHT]\n"
      << "WIDTH and HEIGHT must be less than or equal to original" << endl;
      return 1;
     }
