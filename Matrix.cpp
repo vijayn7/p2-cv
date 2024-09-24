@@ -118,23 +118,23 @@ int Matrix_max(const Matrix* mat) {
 //           If multiple elements are minimal, returns the column of
 //           the leftmost one.
 int Matrix_column_of_min_value_in_row(const Matrix* mat, int row,
-                                      int column_start, int column_end) {
-  
-  int minIndex = column_start + row * Matrix_width(mat) - 1;
-  if (row ==0 && column_start == 0) {minIndex = 0;}
-  if (row == 0) {minIndex = column_start;}
-  // cout << "\nInital MINIndex: " << minIndex << endl;
-  for (int i = 1; i < column_end - column_start; i++) {
-    if (mat->data[minIndex] > mat->data[column_start + row * Matrix_width(mat) + i]) {
-      minIndex = column_start + row * Matrix_width(mat) + i;
-      // cout << "\nNew MINIndex: " << minIndex << endl;
-    }
+                    int column_start, int column_end) {
+  assert(row >= 0 && row < Matrix_height(mat));
+  assert(column_start >= 0 && column_end <= Matrix_width(mat));
+  assert(column_start < column_end);
+
+  int minIndex = column_start;
+  int minValue = mat->data[row * Matrix_width(mat) + column_start];
+
+  for (int col = column_start + 1; col < column_end; ++col) {
+  int currentValue = mat->data[row * Matrix_width(mat) + col];
+  if (currentValue < minValue) {
+    minValue = currentValue;
+    minIndex = col;
   }
-  // cout << "\nFinal MINIndex: " << minIndex << endl;
-  if ((minIndex + 1) % Matrix_width(mat) - 1 < 0) {
-    return 0;
   }
-  return (minIndex + 1) % Matrix_width(mat) - 1;
+
+  return minIndex;
 }
 
 // REQUIRES: mat points to a valid Matrix
